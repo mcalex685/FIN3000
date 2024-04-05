@@ -9,6 +9,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
+import statsmodels.api as sm
 
 #histroical data for selected stocks 
 
@@ -453,6 +454,13 @@ for i, row in df.iterrows():
 plt.title('Expected Return vs. Volatility of Selected Stocks')
 plt.xlabel('Volatility (Standard Deviation %)')
 plt.ylabel('Expected Return (%/year)')
+# Create x-values for the line
+x_values = np.linspace(0,50)
+# Calculate y-values for the line using the intercept and slope
+y_values = 5.781043379513968 + ((12.483289909308533-5.781043379513968)/(rm_sd-0)) * x_values
+# Add a line representing the regression line
+plt.plot(x_values, y_values, color='red', linestyle='--', label='Regression Line')
+plt.xlim(0, 50) 
 plt.grid(True)
 plt.show()
 
@@ -478,6 +486,18 @@ plt.xlabel('Beta')
 plt.ylabel('Expected Return (%/year)')
 plt.xlim(0, 1.7) 
 plt.grid(True)
+plt.show()
+
+# Calculate differences
+df['differences'] = df['Expected Return (Historical)'] - df['Expected Return (CAPM)']
+
+# Bargraph of diff 
+plt.figure(figsize=(14, 8))
+plt.bar(df['Ticker'],df['differences'], color=palette)
+plt.xlabel('Stock Ticker')
+plt.ylabel('Difference (%)')
+plt.title('Differences between Historical and CAPM Expected Returns')
+plt.grid(True, alpha=0.5)
 plt.show()
 
 # Save DataFrame to a CSV file
